@@ -6,9 +6,12 @@ const getProductsListing = async () => {
         console.log(`Tableau des Produits:`, products); // On sort les infos de la console ( utiles pour bien s'assurer que nos informations de l'API sont bien reçues.)
 };
 
+/* Création de la fonction visant à créer les éléments HTML et les liés aux données de l'API. */
+const showProductsListing = async() => {  // Création d'une fonction asynchrone qui attend les informations de getProductsListing
+    await getProductsListing(); 
+    
+        
+};
 
 
-getProductsListing();// On pose la fonction pour la charger et obtenir les données depuis l'API. 
-
-
-
+showProductsListing();
