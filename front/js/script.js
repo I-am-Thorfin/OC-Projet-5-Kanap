@@ -16,7 +16,7 @@ const showProductsListing = async() => {  // Création d'une fonction asynchrone
 
            /* Les Liens*/
            const productLink = document.createElement(`a`); // On déclare une variable et on lui assigne la création d'un élément "a". 
-           productLink.setAttribute('href', `product.html?id=${productsListing[i]._id}` // On modifie l'attribut href.
+           productLink.setAttribute('href', `product.html?id=${productsListing[i]._id}` // On modifie l'attribut href, qu'on compose de l'url vers la page produits + de ID du produit tiré depuis le local storage.
            );
            items.appendChild(productLink); //On ajoute notre lien comme enfant de "items"
            
