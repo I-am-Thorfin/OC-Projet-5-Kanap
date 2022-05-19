@@ -65,14 +65,18 @@ const clickAddToCart = document.getElementById("addToCart"); // On stocke l'id d
 const quantityofProduct = document.getElementById("quantity"); // On stocke la quantité dans une constante à partir de l'ID "quantity"
 let colorChoice = document.getElementById("colors"); // On stocke les choix de couleur dans une constante à partir de l'ID "colors"
 
+let localStorageProductArray = JSON.parse(localStorage.getItem("NAME")); // 
+
 
 
 /*Fonction réagissant au clic*/
 clickAddToCart.addEventListener("click", (event)=>{
-  console.log(colorChoice.value, quantityofProduct.value)
 
+  if (colorChoice.value == 0) { console.log ('Pas de couleur bro')}
 
+  if ( quantityofProduct.value < 1 ) { console.log (`La quantité n'est pas bonne`)} 
 
+console.log(colorChoice.value, quantityofProduct.value, idProduct, product)
 
 })
 
