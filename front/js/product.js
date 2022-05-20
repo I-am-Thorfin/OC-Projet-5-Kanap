@@ -5,7 +5,7 @@
 // For etc etc pour créer à nouveau les éléments qu'on veut afficher, qu'on rechargera de manière dynamique en fonction de l'API. 
 
 let idProduct = new URL(window.location.href).searchParams.get("id"); // on récupére l'id avec les paramétres de l'url
-console.log(idProduct);
+console.log(`ID de notre produit : ${idProduct}`);
 //Récupération des sélecteurs css et des id du HTML pour après
 
 let itemImage     = document.querySelector(".item__img"); // on récupére le selecteur css pour pouvoir mettre l'image après
@@ -54,8 +54,7 @@ const showProduct = async() => {
           color.innerHTML = product.colors[i];
           colorChoice.appendChild(color);
         }
-
- 
+        addToBasket(product)        
 };
 showProduct();
 
@@ -65,26 +64,56 @@ const clickAddToCart = document.getElementById("addToCart"); // On stocke l'id d
 const quantityofProduct = document.getElementById("quantity"); // On stocke la quantité dans une constante à partir de l'ID "quantity"
 let colorChoice = document.getElementById("colors"); // On stocke les choix de couleur dans une constante à partir de l'ID "colors"
 
-let localStorageProductArray = JSON.parse(localStorage.getItem("NAME")); // 
+let pushProductArrayToLocalStorage = JSON.parse(localStorage.getItem("stockedProducts")); // 
 
 
 
 /*Fonction réagissant au clic*/
-clickAddToCart.addEventListener("click", (event)=>{
 
-  if (colorChoice.value == 0) { console.log ('Pas de couleur bro')}
+const addToBasket = () => {
 
-  if ( quantityofProduct.value < 1 ) { console.log (`La quantité n'est pas bonne`)} 
+  clickAddToCart.addEventListener("click", ()=>{
 
-console.log(colorChoice.value, quantityofProduct.value, idProduct, product)
+     
 
-})
+    if (quantity.value > 0 && quantity.value <=100 && quantity.value != 0 && colors.value != 0) { // On définit la condition. Si la quantité d'article est supérieure à 0 et inférieure ou égale à 100 ET si la couleur n'est pas inexistante ( 0 ) alors... 
+  
+      const addColorQuantityandID = Object.assign( {}, product , { // On ajoute de nouvelles propriétés à notre objet "product" via Object.assign
+        addIdProduct: `${idProduct}`, // On ajoute l'ID réccupéré dans product
+        addColors: `${colorChoice.value}`, // On ajoute la couleur choisie dans product
+        addQuantity: `${quantityofProduct.value}`, // On ajoute la quantité souhaitée dans product     
+       });
+      console.log (addColorQuantityandID)
+
+      const addToLocalStorage = () => { // On créé la fonction visant à ajouter des produits dans le localstorage
+        pushProductArrayToLocalStorage.push(addColorQuantityandID); //On utilise la méthode push
+        localStorage.setItem("stockedProducts", JSON.stringify(pushProductArrayToLocalStorage)); // Et on push nos quantités, couleurs et ID avec une clé "stockedProducts".
+      };
+      
+      if (pushProductArrayToLocalStorage) { console.log(pushProductArrayToLocalStorage)}
+
+      else {pushProductArrayToLocalStorage = [] } // On utilise push, dans notre tableau.
+
+      addToLocalStorage () // On appelle notre fonction pour qu'elle soit opérante;  
+
+      alert("Vos articles ont bien été ajoutés au panier");   
+    } 
+
+    else { 
+      alert("Merci de veiller à choisir une quantité comprise en 1 et 100 ainsi qu'à définir la couleur de votre article"); 
+    } 
+
+
+  })
+
+}
 
 
 
 
 
 
-// Fonction pour envoyer dans le local storage, basé sur l'evenement 'click" ou submit
 
-//PS : Penser à ne surtout pas envoyer le prix dans le localstorage. ( Utiliser parse json ??) 
+
+
+
