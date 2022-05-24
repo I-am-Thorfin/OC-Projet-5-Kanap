@@ -9,15 +9,8 @@ const getProductById = async() => {
   .then((response) => response.json()
   .then(json => product = json));      
 };
-
-
-//*Puisque l'ensemble de nos ID sont déjà définies dans le HTML, on met l'ensemble de nos ID et de nos selecteurs dans des variables*//
-let itemImage     = document.querySelector(".item__img"); // on réccupère le selecteur .item__img.
-let title       = document.getElementById("title"); // on récupéré l'id title du document HTML
-let price       = document.getElementById("price"); // on récupére l'id price du document HTML
-let description = document.getElementById("description"); // on récupére l'id description du document HTML
-
 getProductById(); // On appelle la fonction précédente pour récupérer les données de l'API
+
 
 // fonction pour intégrer dynamiquement ce qu'on réccupère de l'API afin de le faire apparaître dynamiquement sur la page.
 const showProduct = async() => { 
@@ -28,41 +21,42 @@ const showProduct = async() => {
         document.title = dynamicPageTitle;
         
         /* Image du produit*/
+        let itemImage     = document.querySelector(".item__img"); // on cible le selecteur .item__img.
         let imageProduct = document.createElement("img");
         imageProduct.setAttribute('src', product.imageUrl);
         imageProduct.setAttribute('alt', product.altTxt);
         itemImage.appendChild(imageProduct);
 
-        // on ajoute le nom
+        /*Ajout du titre*/
+        let title       = document.getElementById("title"); // On cible notre élément titre
         title.innerHTML = product.name;
 
-        // on ajoute les prix
+        /*Ajout du Price*/
+        let price       = document.getElementById("price"); // on récupére l'id price du document HTML
         price.innerHTML = product.price;
 
-        // on ajout la description
+        /**Ajout de la Description */
+        let description = document.getElementById("description"); // on récupére l'id description du document HTML
         description.innerHTML = product.description;
 
-        // On va chercher les couleurs du tableau colors avec une boucle for et on créait l'html
+        /*Ajout de l'input de choix de couleur*/
         for (let i=0; i < product.colors.length; i++) {
 
           let color = document.createElement("option");
           color.setAttribute('value', product.colors[i]);
           color.innerHTML = product.colors[i];
-          colorChoice.appendChild(color);
-        }
-
-        addToBasket()       
-              
+          colorChoice.appendChild(color); //PS: la valise "colorChoice est déclarée en dehors de cette fonction puisque sa valeur sera utile dans la globalité du codage.
+        }    
+                
 };
 
 showProduct();
 
 /* FONCTION POUR ENVOYER TOUT CE QU'ON VEUT VERS LE LOCAL STORAGE */
-
 const clickAddToCart = document.getElementById("addToCart"); // On stocke l'id du bouton AddtoCart dans une constante qu'on utilisera pour repérer un click, plus tard.
 const quantityofProduct = document.getElementById("quantity"); // On stocke la quantité dans une constante à partir de l'ID "quantity"
 const colorChoice = document.getElementById("colors"); // On stocke les choix de couleur dans une constante à partir de l'ID "colors"
-const productArrayToLocalStorage = JSON.parse(localStorage.getItem("stockedProducts")); // 
+let productArrayToLocalStorage = JSON.parse(localStorage.getItem("stockedProducts")); // 
 
 /*Fonction réagissant au clic*/
 
@@ -123,6 +117,7 @@ const addToBasket = () => {
     } 
   })
 }
+addToBasket()
 
 
 
