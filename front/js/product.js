@@ -87,7 +87,7 @@ const addToBasket = () => {
       addToBasketOrChangeQuantity(productArrayToLocalStorage, idProduct, colorChoice.value); // On déclare notre fonction afin qu'elle soit opérante.
       function addToBasketOrChangeQuantity (productArrayToLocalStorage, idProduct, addColors) { 
         let checkCart       = productArrayToLocalStorage;
-        let sameProduct = checkCart.find(p => p.addIdProduct == idProduct && p.addColors == addColors);
+        let sameProduct = checkCart.find(element => element.addIdProduct == idProduct && element.addColors == addColors); // On utilise la méthode find qui permet d'associer des valeurs similaires.
       // Si sameProduct n'est pas indéfini ( Comprendre par là "si le produit avec l'ID et la couleur existe déjà )
         if(sameProduct != undefined) {
           sameProduct.addQuantity= parseFloat(sameProduct.addQuantity)+parseFloat(quantityofProduct.value); // On défini alors que notre quantité sera égale à notre quantité déjà défini, à laquelle on ajoutera la quantité choisie.
