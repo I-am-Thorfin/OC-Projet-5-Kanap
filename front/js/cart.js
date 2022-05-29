@@ -98,17 +98,19 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
         })  
       };
       quantityModif()   
+
+    /* Suppression d'un article via la méthode Filter */  
       const deleteItem = () => {
         deleteItemP.addEventListener("click" , (e) => {
           e.preventDefault();
     // On commence par créer des constantes des éléments à filtrer ( dans l'itération). 
-       let filteredId = addedProduct[i].addIdProduct;
-        let filteredColor = addedProduct[i].addColors;
+          let filteredId = addedProduct[i].addIdProduct;
+          let filteredColor = addedProduct[i].addColors;
 
     // On applique la méthode filter, et on filtre ce qui correspond et ce qui ne correspond pas.
-        filterProduct = addedProduct.filter( element => element.addIdProduct !== filteredId || element.addColors !== filteredColor);
-        localStorage.setItem("stockedProducts", JSON.stringify(filterProduct)); // on modifie ou supprime la quantité dans le localStorage
-      location.reload();
+          filterProduct = addedProduct.filter( element => element.addIdProduct !== filteredId || element.addColors !== filteredColor); // application de la méthode filtrer
+          localStorage.setItem("stockedProducts", JSON.stringify(filterProduct)); // Envoi des nouvelles infos filtrés vers le local storage.
+          location.reload(); // Rechargement afin de mettre à jour la page au clic
         });
       }
       deleteItem();
