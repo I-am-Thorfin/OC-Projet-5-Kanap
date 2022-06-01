@@ -6,13 +6,12 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
     
     /* On reprend une fonction fetch basée afin d'aller chercher les informations en fonction de l'ID d'un produit. */
     const getProductById = async() => {
-      await fetch(`http://localhost:3000/api/products/${addedProduct[i].addIdProduct}`) // On prend l'ID de notre Local Storage pour lui permettre de trouver le produit correspondant directement dans l'API.
+      await fetch(`http://localhost:3000/api/products/${addedProduct[i].addIdProduct}`) // On prend l'ID de notre Local Storage pour lui permettre de trouver le produit correspondant directement dans l'API. 
       .then((response) => response.json()
       .then(json => product = json));  
       console.log(product) 
 
-      console.log(product.imageUrl)
-          
+               
       let cartItems = document.getElementById("cart__items"); // On met dans une variable notre ID cart__items dans laquelle on va par la suitre créer les classes.
      
    /* Creation de l'article */
@@ -49,10 +48,11 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
       let cartItemContentDescriptionPColor = document.createElement ("p");
       divcartItemContentDescription.appendChild(cartItemContentDescriptionPColor);
       cartItemContentDescriptionPColor.innerHTML =addedProduct[i].addColors;  // La couleur vient de notre Local Storage
-
+      
+      let pricePerArticle = product.price*addedProduct[i].addQuantity
       let cartItemContentDescriptionPPrice = document.createElement ("p");
       divcartItemContentDescription.appendChild(cartItemContentDescriptionPPrice);
-      cartItemContentDescriptionPPrice.innerHTML = `${product.price} €` ;  // Le prix vient directement de l'API
+      cartItemContentDescriptionPPrice.innerHTML = `${pricePerArticle} €` ;  // Le prix vient directement de l'API
 
     /* Creation de la div qui contient l'affichage de la quantité et le bouton de suppression */
       let divCartItemContentSettings = document.createElement ("div");
@@ -92,12 +92,13 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
     /* Modification de la quantité */
       const quantityModif = () => {
         itemQuantity.addEventListener ("change", () => {
-          console.log ("changement de quantity")
+          console.log ("changement de quantity");
           addedProduct[i].addQuantity =  itemQuantity.value;
-          localStorage.setItem("stockedProducts", JSON.stringify(addedProduct))          
+          localStorage.setItem("stockedProducts", JSON.stringify(addedProduct));
+          location.reload();          
         })  
       };
-      quantityModif()   
+      quantityModif();
 
     /* Suppression d'un article via la méthode Filter */  
       const deleteItem = () => {
@@ -117,13 +118,229 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
 
     // DEMANDER A WILFRIED POUR LE TABLEAU VIDE DANS LE LOCAL STORAGE
 
+    /* Bas de tableau ; Quantité et Prix total. */
+    
+      let getTotalQuantity = [];
+      let getTotalPrice = [];
+      
+      for ( let j=0; j < addedProduct.length; j++ ) {
+      
+        const getProductPriceById = async() => {
+          await fetch(`http://localhost:3000/api/products/${addedProduct[j].addIdProduct}`) // On prend l'ID de notre Local Storage pour lui permettre de trouver le produit correspondant directement dans l'API.
+          .then((response) => response.json()
+          .then(json => product = json));        
+        
+        const reducer = (accumulator, currentValue) => accumulator + currentValue;  // On déclate la méthode reducer, qu'on utilisera par la suite.
+        
+        /* Quantité totale : */
+        
+        let quantityPerArticle = parseFloat(addedProduct[j].addQuantity); // On définit la quantité totale en utilisant ParseFloat pour être sûr qu'il s'agit bien d'un nombre. Puisqu'on itère dans la boucle for, on obtiendra autant de valeur que d'articles dans le panier
+        getTotalQuantity.push(quantityPerArticle) // On push nos quantités dans un dans le tableau de notre variable "getTotalQuantity"
+        const additionOfAllQuantities = getTotalQuantity.reduce(reducer,0); // on applique la méthode reducer qui va additionner l'ensemble de nos quantité.
+
+        console.log (additionOfAllQuantities)
+
+        totalQuantity = additionOfAllQuantities; // On définit la quantité dans une variable dans une variable
+        let productTotalQuantity = document.getElementById('totalQuantity'); // On désigne l'ID dans notre HTML
+        productTotalQuantity.innerHTML = totalQuantity; // On injecte notre "totalQuantity précédemment défini"
+      
+        /* Prix totale : */
+
+        let totalPricePerArticle = product.price*addedProduct[j].addQuantity; // On définit le prix total par article en multipliant le prix des produits tiré de l'API avec l'itération de la quantité
+        getTotalPrice.push(totalPricePerArticle) // On envoie nos prix par article dans le tableau "getTotalPrice"
+        const additionOfAllPrices = getTotalPrice.reduce(reducer,0); // On applique la méthode reducer pour faire le calcul et obtenir l'addition de tous nos prix pour avoir le prix total.
+
+        console.log (additionOfAllPrices)
+
+        totalPrice = additionOfAllPrices; // On définit notre prix dans une variable
+        let productTotalPrice = document.getElementById('totalPrice'); // On désigne l'ID dans notre HTML
+        productTotalPrice.innerHTML = totalPrice; // On injecte notre "totalPrice précédemment défini"
+        
+        
+
+        
+        }  
+        getProductPriceById();
+      };
+        
     }
     
 
     getProductById(); 
   };
+  //*  AJOUTER UNE IF / ELSE pour afficher quelque chose au cas où le Panier est vide. *//
+
+  /* Formulaire */
 
 
+  let formFirstName = document.getElementById("firstName");
+  let formFirstNameErrorMsg = document.getElementById("firstNameErrorMsg") ; 
+  let regexFormFirstName = /^[a-zA-ZÀ-ú\-\s]+$/;
+
+
+  let formLastName = document.getElementById("lastName");
+  let formLastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+  let regexFormLastName = /^[a-zA-ZÀ-ú\-\s]+$/;
+
+
+  let formAddress = document.getElementById("address");
+  let formAddressErrorMsg = document.getElementById("addressErrorMsg");
+  let regexFormAddress = /^[a-zA-ZÀ-ú0-9\-\s]+$/;
+
+
+  let formTown = document.getElementById("city");   
+  let formTownErrorMsg = document.getElementById("cityErrorMsg");
+  let regexFormTown = /^[a-zA-ZÀ-ú\-\s]+$/;
+
+
+  let formMail = document.getElementById("email");
+  let formMailErrorMsg = document.getElementById("emailErrorMsg");
+  let regexFormMail = /^[a-zA-ZÀ-ú0-9-._]+[@]{1}[a-zA-Z0-9-._]+[.]{1}[a-zA-Z]+$/;
+
+  let btnSubmit = document.getElementById("order");
+
+
+  btnSubmit.addEventListener("click", function(event){
+    event.preventDefault()
+
+    let formCheckIsOk = false;
+
+    /* Le Prénom */
+    if ( formFirstName.value === "" )
+      {
+      formFirstName.style.border = "red 2px solid";
+      formFirstNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+      formCheckIsOk = false;
+      console.log("Le champ prénom n'est pas rempli ");
+      }
+    else if (
+      formFirstName.value.match(regexFormFirstName) === null )  { 
+      formFirstName.style.border = "red 2px solid"
+      formFirstNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+      formCheckIsOk = false
+      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+     }
+
+    else {
+      formFirstNameErrorMsg.innerHTML = ""
+      formFirstName.style.border = "green 2px solid"
+      formCheckIsOk = true
+      console.log(" Prénom bien renseigné. FormCheckIsOk = TRUE ")
+    }
+
+    /* Le Nom */
+    if ( formLastName.value === "" )
+      {
+      formLastName.style.border = "red 2px solid";
+      formLastNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
+      formCheckIsOk = false;
+      console.log(" Le champ nom n'est pas rempli ")
+      }
+    else if (
+      formLastName.value.match(regexFormLastName) === null )  { 
+      formLastName.style.border = "red 2px solid"
+      formLastNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+      formCheckIsOk = false
+      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+     }
+
+    else {
+      formFirstNameErrorMsg.innerHTML = ""
+      formFirstName.style.border = "green 2px solid"
+      formCheckIsOk = true
+      console.log(" Nom bien renseigné. FormCheckIsOk = TRUE ")
+    }
+
+    /* L'Adresse */
+    if ( formAddress.value === "" )
+      {
+      formAddress.style.border = "red 2px solid";
+      formAddressErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
+      formCheckIsOk = false;
+      console.log(" Le champ Adresse n'est pas rempli ")
+      }
+    else if (
+      formAddress.value.match(regexFormAddress) === null )  { 
+      formAddress.style.border = "red 2px solid"
+      formAddressErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+      formCheckIsOk = false
+      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+     }
+
+    else {
+      formAddressErrorMsg.innerHTML = ""
+      formAddress.style.border = "green 2px solid"
+      formCheckIsOk = true
+      console.log(" Adresse bien renseignée. FormCheckIsOk = TRUE ")
+    }
+
+    /* La ville */
+    
+    if ( formTown.value === "" )
+    {
+    formTown.style.border = "red 2px solid";
+    formTownErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+    formCheckIsOk = false;
+    console.log(" Le champ Ville n'est pas rempli ");
+    }
+    else if (
+    formTown.value.match(regexFormTown) === null )  { 
+    formTown.style.border = "red 2px solid";
+    formTownErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
+    formCheckIsOk = false;
+    console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
+   }
+
+   else {
+    formTownErrorMsg.innerHTML = "";
+    formTown.style.border = "green 2px solid";
+    formCheckIsOk = true;
+    console.log(" Ville bien renseignée. FormCheckIsOk = TRUE ");
+   }
+
+    /*L'Email*/
+
+    if ( formMail.value === "" )
+    {
+      formMail.style.border = "red 2px solid";
+      formMailErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+    formCheckIsOk = false;
+    console.log(" Le champ Email n'est pas rempli ");
+    }
+    else if (
+      formMail.value.match(regexFormMail) === null )  { 
+      formMail.style.border = "red 2px solid";
+      formMailErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
+      formCheckIsOk = false;
+      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
+    }
+
+    else {
+      formMailErrorMsg.innerHTML = ""
+      formMail.style.border = "green 2px solid"
+      formCheckIsOk = true
+      console.log(" Email bien renseignée. FormCheckIsOk = TRUE ")
+    }
+
+    /* SI formCheckIsOk = True. 
+        Alors on ajoute les valeurs tapées dans des constantes. 
+        On réccupère les constantes des valeurs tapées, et on les envoie dans un objet Contact
+        On réccupère nos ID des produits et on les mets dans un objet Product ID. 
+
+        On utilise la méthode post pour envoyer Contact et Product ID. 
+        On guide vers la page confirmation. 
+
+      
+    */
+
+  })
+  
+
+
+
+
+
+  
   
  
  
