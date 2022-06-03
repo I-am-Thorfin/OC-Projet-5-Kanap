@@ -1,9 +1,11 @@
 let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on recupere ce qu'il y a dans le local storage et on le stock dans une variable
-
-
+let products = [] // On créé un tableau products dans lequel on finira par Push nos ID pour l'order.
 
   for ( let i=0; i < addedProduct.length; i++ ) {   // on s'apprête à itérer dans addedProduct avec un for  
+
     
+
+
     /* On reprend une fonction fetch basée afin d'aller chercher les informations en fonction de l'ID d'un produit. */
     const getProductById = async() => {
       await fetch(`http://localhost:3000/api/products/${addedProduct[i].addIdProduct}`) // On prend l'ID de notre Local Storage pour lui permettre de trouver le produit correspondant directement dans l'API. 
@@ -21,6 +23,8 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
       article.setAttribute("data-id", addedProduct[i].addIdProduct); // On modifie l'attribut "data-id" de notre article pour y ajouter l'ID du produit stocké dans le local storage.
       article.setAttribute("data-color", addedProduct[i].addColors); //  on modifie l'attribut data-color pour y ajouter la couleur choisie et stockée dans le local storage.
     
+    
+
     /* Creation de la div pour l'image */
       let divCartItemImg = document.createElement ("div");
       divCartItemImg.className = "cart__item__img";
@@ -162,181 +166,251 @@ let addedProduct = JSON.parse(localStorage.getItem("stockedProducts")); // on re
         }  
         getProductPriceById();
       };
+
+
+
+
+       //*  AJOUTER UNE IF / ELSE pour afficher quelque chose au cas où le Panier est vide. *//
+
         
     }
     
+    
+   
+    /* Début formulaire*/
+
+     /* Formulaire */
+
+
+   let formFirstName = document.getElementById("firstName");
+   let formFirstNameErrorMsg = document.getElementById("firstNameErrorMsg") ; 
+   let regexFormFirstName = /^[a-zA-ZÀ-ú\-\s]+$/;
+ 
+ 
+   let formLastName = document.getElementById("lastName");
+   let formLastNameErrorMsg = document.getElementById("lastNameErrorMsg");
+   let regexFormLastName = /^[a-zA-ZÀ-ú\-\s]+$/;
+ 
+ 
+   let formAddress = document.getElementById("address");
+   let formAddressErrorMsg = document.getElementById("addressErrorMsg");
+   let regexFormAddress = /^[a-zA-ZÀ-ú0-9\-\s]+$/;
+ 
+ 
+   let formTown = document.getElementById("city");   
+   let formTownErrorMsg = document.getElementById("cityErrorMsg");
+   let regexFormTown = /^[a-zA-ZÀ-ú\-\s]+$/;
+ 
+ 
+   let formMail = document.getElementById("email");
+   let formMailErrorMsg = document.getElementById("emailErrorMsg");
+   let regexFormMail = /^[a-zA-ZÀ-ú0-9-._]+[@]{1}[a-zA-Z0-9-._]+[.]{1}[a-zA-Z]+$/;
+ 
+   let btnSubmit = document.getElementById("order");
+ 
+ 
+   btnSubmit.addEventListener("click", function(event){
+     event.preventDefault()
+ 
+     let formCheckIsOk = false;
+ 
+     /* Le Prénom */
+     if ( formFirstName.value === "" )
+       {
+       formFirstName.style.border = "red 2px solid";
+       formFirstNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+       formCheckIsOk = false;
+       console.log("Le champ prénom n'est pas rempli ");
+       }
+     else if (
+       formFirstName.value.match(regexFormFirstName) === null )  { 
+       formFirstName.style.border = "red 2px solid"
+       formFirstNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+       formCheckIsOk = false
+       console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+      }
+ 
+     else {
+       formFirstNameErrorMsg.innerHTML = ""
+       formFirstName.style.border = "green 2px solid"
+       formCheckIsOk = true
+       console.log(" Prénom bien renseigné. FormCheckIsOk = TRUE ")
+     }
+ 
+     /* Le Nom */
+     if ( formLastName.value === "" )
+       {
+       formLastName.style.border = "red 2px solid";
+       formLastNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
+       formCheckIsOk = false;
+       console.log(" Le champ nom n'est pas rempli ")
+       }
+     else if (
+       formLastName.value.match(regexFormLastName) === null )  { 
+       formLastName.style.border = "red 2px solid"
+       formLastNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+       formCheckIsOk = false
+       console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+      }
+ 
+     else {
+       formLastNameErrorMsg.innerHTML = ""
+       formLastName.style.border = "green 2px solid"
+       formCheckIsOk = true
+       console.log(" Nom bien renseigné. FormCheckIsOk = TRUE ")
+     }
+ 
+     /* L'Adresse */
+     if ( formAddress.value === "" )
+       {
+       formAddress.style.border = "red 2px solid";
+       formAddressErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
+       formCheckIsOk = false;
+       console.log(" Le champ Adresse n'est pas rempli ")
+       }
+     else if (
+       formAddress.value.match(regexFormAddress) === null )  { 
+       formAddress.style.border = "red 2px solid"
+       formAddressErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
+       formCheckIsOk = false
+       console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
+      }
+ 
+     else {
+       formAddressErrorMsg.innerHTML = ""
+       formAddress.style.border = "green 2px solid"
+       formCheckIsOk = true
+       console.log(" Adresse bien renseignée. FormCheckIsOk = TRUE ")
+     }
+ 
+     /* La ville */
+     
+     if ( formTown.value === "" )
+     {
+     formTown.style.border = "red 2px solid";
+     formTownErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+     formCheckIsOk = false;
+     console.log(" Le champ Ville n'est pas rempli ");
+     }
+     else if (
+     formTown.value.match(regexFormTown) === null )  { 
+     formTown.style.border = "red 2px solid";
+     formTownErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
+     formCheckIsOk = false;
+     console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
+    }
+ 
+    else {
+     formTownErrorMsg.innerHTML = "";
+     formTown.style.border = "green 2px solid";
+     formCheckIsOk = true;
+     console.log(" Ville bien renseignée. FormCheckIsOk = TRUE ");
+    }
+ 
+     /*L'Email*/
+ 
+     if ( formMail.value === "" )
+     {
+       formMail.style.border = "red 2px solid";
+       formMailErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
+     formCheckIsOk = false;
+     console.log(" Le champ Email n'est pas rempli ");
+     }
+     else if (
+       formMail.value.match(regexFormMail) === null )  { 
+       formMail.style.border = "red 2px solid";
+       formMailErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir une adresse mail valide : ****@****.*** ";
+       formCheckIsOk = false;
+       console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
+     }
+ 
+     else {
+       formMailErrorMsg.innerHTML = ""
+       formMail.style.border = "green 2px solid"
+       formCheckIsOk = true
+       console.log(" Email bien renseignée. FormCheckIsOk = TRUE ")
+     }
+      
+     /* Envoi de nos infos après le clic */
+ 
+     if (formCheckIsOk == true) {  // si nos conditions des Regex sont "true"
+      
+      
+      
+      
+    
+       products.push(addedProduct[i].addIdProduct)
+
+      
+
+       
+       const firstName = formFirstName.value
+       const lastName = formLastName.value
+       const address = formAddress.value
+       const city = formTown.value
+       const email = formMail.value
+ 
+       let contact ={ firstName, lastName, address, city, email }
+          
+ 
+       console.log("test "+ products)
+ 
+      
+ 
+       
+       const promise =  {
+        method: 'POST',
+        body: JSON.stringify(
+          {
+            contact,
+            products
+          }
+        ),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    fetch("http://localhost:3000/api/products/order", promise)
+    .then(response => response.json())
+    .then(data => {
+    localStorage.setItem('orderId', data.orderId);
+    document.location.href = 'confirmation.html?id='+ data.orderId;
+    console.log(data.orderId);
+  });
+       
+ 
+ 
+     }
+ 
+ 
+     
+   })
+
+    /* fin formulaire */
+
 
     getProductById(); 
   };
-  //*  AJOUTER UNE IF / ELSE pour afficher quelque chose au cas où le Panier est vide. *//
-
-  /* Formulaire */
+ 
 
 
-  let formFirstName = document.getElementById("firstName");
-  let formFirstNameErrorMsg = document.getElementById("firstNameErrorMsg") ; 
-  let regexFormFirstName = /^[a-zA-ZÀ-ú\-\s]+$/;
 
 
-  let formLastName = document.getElementById("lastName");
-  let formLastNameErrorMsg = document.getElementById("lastNameErrorMsg");
-  let regexFormLastName = /^[a-zA-ZÀ-ú\-\s]+$/;
 
-
-  let formAddress = document.getElementById("address");
-  let formAddressErrorMsg = document.getElementById("addressErrorMsg");
-  let regexFormAddress = /^[a-zA-ZÀ-ú0-9\-\s]+$/;
-
-
-  let formTown = document.getElementById("city");   
-  let formTownErrorMsg = document.getElementById("cityErrorMsg");
-  let regexFormTown = /^[a-zA-ZÀ-ú\-\s]+$/;
-
-
-  let formMail = document.getElementById("email");
-  let formMailErrorMsg = document.getElementById("emailErrorMsg");
-  let regexFormMail = /^[a-zA-ZÀ-ú0-9-._]+[@]{1}[a-zA-Z0-9-._]+[.]{1}[a-zA-Z]+$/;
-
-  let btnSubmit = document.getElementById("order");
-
-
-  btnSubmit.addEventListener("click", function(event){
-    event.preventDefault()
-
-    let formCheckIsOk = false;
-
-    /* Le Prénom */
-    if ( formFirstName.value === "" )
-      {
-      formFirstName.style.border = "red 2px solid";
-      formFirstNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-      formCheckIsOk = false;
-      console.log("Le champ prénom n'est pas rempli ");
-      }
-    else if (
-      formFirstName.value.match(regexFormFirstName) === null )  { 
-      formFirstName.style.border = "red 2px solid"
-      formFirstNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-      formCheckIsOk = false
-      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
-     }
-
-    else {
-      formFirstNameErrorMsg.innerHTML = ""
-      formFirstName.style.border = "green 2px solid"
-      formCheckIsOk = true
-      console.log(" Prénom bien renseigné. FormCheckIsOk = TRUE ")
-    }
-
-    /* Le Nom */
-    if ( formLastName.value === "" )
-      {
-      formLastName.style.border = "red 2px solid";
-      formLastNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
-      formCheckIsOk = false;
-      console.log(" Le champ nom n'est pas rempli ")
-      }
-    else if (
-      formLastName.value.match(regexFormLastName) === null )  { 
-      formLastName.style.border = "red 2px solid"
-      formLastNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-      formCheckIsOk = false
-      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
-     }
-
-    else {
-      formFirstNameErrorMsg.innerHTML = ""
-      formFirstName.style.border = "green 2px solid"
-      formCheckIsOk = true
-      console.log(" Nom bien renseigné. FormCheckIsOk = TRUE ")
-    }
-
-    /* L'Adresse */
-    if ( formAddress.value === "" )
-      {
-      formAddress.style.border = "red 2px solid";
-      formAddressErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
-      formCheckIsOk = false;
-      console.log(" Le champ Adresse n'est pas rempli ")
-      }
-    else if (
-      formAddress.value.match(regexFormAddress) === null )  { 
-      formAddress.style.border = "red 2px solid"
-      formAddressErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-      formCheckIsOk = false
-      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
-     }
-
-    else {
-      formAddressErrorMsg.innerHTML = ""
-      formAddress.style.border = "green 2px solid"
-      formCheckIsOk = true
-      console.log(" Adresse bien renseignée. FormCheckIsOk = TRUE ")
-    }
-
-    /* La ville */
-    
-    if ( formTown.value === "" )
-    {
-    formTown.style.border = "red 2px solid";
-    formTownErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-    formCheckIsOk = false;
-    console.log(" Le champ Ville n'est pas rempli ");
-    }
-    else if (
-    formTown.value.match(regexFormTown) === null )  { 
-    formTown.style.border = "red 2px solid";
-    formTownErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
-    formCheckIsOk = false;
-    console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
-   }
-
-   else {
-    formTownErrorMsg.innerHTML = "";
-    formTown.style.border = "green 2px solid";
-    formCheckIsOk = true;
-    console.log(" Ville bien renseignée. FormCheckIsOk = TRUE ");
-   }
-
-    /*L'Email*/
-
-    if ( formMail.value === "" )
-    {
-      formMail.style.border = "red 2px solid";
-      formMailErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-    formCheckIsOk = false;
-    console.log(" Le champ Email n'est pas rempli ");
-    }
-    else if (
-      formMail.value.match(regexFormMail) === null )  { 
-      formMail.style.border = "red 2px solid";
-      formMailErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
-      formCheckIsOk = false;
-      console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
-    }
-
-    else {
-      formMailErrorMsg.innerHTML = ""
-      formMail.style.border = "green 2px solid"
-      formCheckIsOk = true
-      console.log(" Email bien renseignée. FormCheckIsOk = TRUE ")
-    }
-
-    /* SI formCheckIsOk = True. 
-        Alors on ajoute les valeurs tapées dans des constantes. 
-        On réccupère les constantes des valeurs tapées, et on les envoie dans un objet Contact
-        On réccupère nos ID des produits et on les mets dans un objet Product ID. 
-
-        On utilise la méthode post pour envoyer Contact et Product ID. 
-        On guide vers la page confirmation. 
-
-      
-    */
-
-  })
   
 
 
+
+
+
+
+
+
+
+
+
+  
 
 
 
