@@ -5,10 +5,6 @@ let products = [] // On créé un tableau products dans lequel on finira par Pus
 
 
 
-
-
-
-
 const displayCart = () => {
 
   
@@ -139,9 +135,9 @@ const displayCart = () => {
 
         console.log (additionOfAllQuantities)
 
-        totalQuantity = additionOfAllQuantities; // On définit la quantité dans une variable dans une variable
+        totalQuantity = additionOfAllQuantities; // On définit la quantité dans une variable
         let productTotalQuantity = document.getElementById('totalQuantity'); // On désigne l'ID dans notre HTML
-        productTotalQuantity.innerHTML = totalQuantity; // On injecte notre "totalQuantity précédemment défini"
+        productTotalQuantity.innerHTML = totalQuantity; // On injecte notre "totalQuantity" précédemment défini
       
         /* Prix totale : */
 
@@ -192,30 +188,35 @@ const displayCart = () => {
 
     btnSubmit.addEventListener("click", function(event){
       event.preventDefault()
-
-      let formCheckIsOk = false;
+      
+      /* On créer des variables, booléenne, qui nous permettront de savoir si chaque élément du formulaire est bien rempli */
+      let firstNameCheckIsOk = false;
+      let nameCheckIsOk = false;
+      let adressCheckIsOk = false;
+      let cityCheckIsOk = false;
+      let emailCheckisOk = false;
 
       /* Le Prénom */
       if ( formFirstName.value === "" )
         {
         formFirstName.style.border = "red 2px solid";
         formFirstNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-        formCheckIsOk = false;
+        firstNameCheckIsOk = false;
         console.log("Le champ prénom n'est pas rempli ");
         }
       else if (
         formFirstName.value.match(regexFormFirstName) === null )  { 
         formFirstName.style.border = "red 2px solid"
         formFirstNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-        formCheckIsOk = false
+        firstNameCheckIsOk = false
         console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
         }
 
       else {
         formFirstNameErrorMsg.innerHTML = ""
         formFirstName.style.border = "green 2px solid"
-        formCheckIsOk = true
-        console.log(" Prénom bien renseigné. FormCheckIsOk = TRUE ")
+        firstNameCheckIsOk = true
+        console.log(" Prénom bien renseigné. FirstNameCheckIsOk = TRUE ")
       }
 
       /* Le Nom */
@@ -223,22 +224,22 @@ const displayCart = () => {
         {
         formLastName.style.border = "red 2px solid";
         formLastNameErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
-        formCheckIsOk = false;
+        nameCheckIsOk = false;
         console.log(" Le champ nom n'est pas rempli ")
         }
       else if (
         formLastName.value.match(regexFormLastName) === null )  { 
         formLastName.style.border = "red 2px solid"
         formLastNameErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-        formCheckIsOk = false
+        nameCheckIsOk = false
         console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
         }
 
       else {
         formLastNameErrorMsg.innerHTML = ""
         formLastName.style.border = "green 2px solid"
-        formCheckIsOk = true
-        console.log(" Nom bien renseigné. FormCheckIsOk = TRUE ")
+        nameCheckIsOk = true
+        console.log(" Nom bien renseigné. nameCheckIsOk = TRUE ")
       }
 
       /* L'Adresse */
@@ -246,22 +247,22 @@ const displayCart = () => {
         {
         formAddress.style.border = "red 2px solid";
         formAddressErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. "
-        formCheckIsOk = false;
+        adressCheckIsOk = false;
         console.log(" Le champ Adresse n'est pas rempli ")
         }
       else if (
         formAddress.value.match(regexFormAddress) === null )  { 
         formAddress.style.border = "red 2px solid"
         formAddressErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres."
-        formCheckIsOk = false
+        adressCheckIsOk = false
         console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ")
         }
 
       else {
         formAddressErrorMsg.innerHTML = ""
         formAddress.style.border = "green 2px solid"
-        formCheckIsOk = true
-        console.log(" Adresse bien renseignée. FormCheckIsOk = TRUE ")
+        adressCheckIsOk = true
+        console.log(" Adresse bien renseignée. adressCheckIsOk = TRUE ")
       }
 
       /* La ville */
@@ -270,22 +271,22 @@ const displayCart = () => {
       {
       formTown.style.border = "red 2px solid";
       formTownErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-      formCheckIsOk = false;
+      cityCheckIsOk = false;
       console.log(" Le champ Ville n'est pas rempli ");
       }
       else if (
       formTown.value.match(regexFormTown) === null )  { 
       formTown.style.border = "red 2px solid";
       formTownErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir de chiffres.";
-      formCheckIsOk = false;
+      cityCheckIsOk = false;
       console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
       }
 
       else {
       formTownErrorMsg.innerHTML = "";
       formTown.style.border = "green 2px solid";
-      formCheckIsOk = true;
-      console.log(" Ville bien renseignée. FormCheckIsOk = TRUE ");
+      cityCheckIsOk = true;
+      console.log(" Ville bien renseignée. cityCheckIsOk = TRUE ");
       }
 
       /*L'Email*/
@@ -294,51 +295,42 @@ const displayCart = () => {
       {
         formMail.style.border = "red 2px solid";
         formMailErrorMsg.innerHTML = "&#10006; Veuillez compléter ce champ SVP. ";
-      formCheckIsOk = false;
+        emailCheckisOk = false;
       console.log(" Le champ Email n'est pas rempli ");
       }
       else if (
         formMail.value.match(regexFormMail) === null )  { 
         formMail.style.border = "red 2px solid";
         formMailErrorMsg.innerHTML = "&#10006; Ce champ ne doit pas contenir une adresse mail valide : ****@****.*** ";
-        formCheckIsOk = false;
+        emailCheckisOk = false;
         console.log(" Le champ rempli ne respecte pas les conditions ( utilisation de chiffres ou de caractères non conformes) ");
       }
 
       else {
         formMailErrorMsg.innerHTML = ""
         formMail.style.border = "green 2px solid"
-        formCheckIsOk = true
-        console.log(" Email bien renseignée. FormCheckIsOk = TRUE ")
+        emailCheckisOk = true
+        console.log(" Email bien renseignée. emailCheckIsOk = TRUE ")
       }
         
       /* Envoi de nos infos après le clic */
 
-      if (formCheckIsOk == true) {  // si nos conditions des Regex sont "true"
+      if ( firstNameCheckIsOk == true && nameCheckIsOk == true && adressCheckIsOk == true && cityCheckIsOk == true && emailCheckisOk == true ) {  // si nos conditions des Regex sont "true"
         
-        
-        
-        
-      
-        products.push(addedProduct[i].addIdProduct)
-
+        products.push(addedProduct[i].addIdProduct) // On push l'ensemble de nos ID dans le tableau products
         
 
-        
+        /* On entre les valeurs rentrées par l'utilisateur dans le formulaire dans des variables correspondantes aux attentes de l'API */
         const firstName = formFirstName.value
         const lastName = formLastName.value
         const address = formAddress.value
         const city = formTown.value
         const email = formMail.value
 
-        let contact ={ firstName, lastName, address, city, email }
+        let contact ={ firstName, lastName, address, city, email } // On définit notre objet contact et son contenu
             
-
-        console.log("test "+ products)
-
         
 
-        
         const promise =  {
           method: 'POST',
           body: JSON.stringify(
@@ -352,15 +344,15 @@ const displayCart = () => {
           }
         }
 
-      fetch("http://localhost:3000/api/products/order", promise)
+      console.log (promise)  
+
+      fetch("http://localhost:3000/api/products/order", promise) // On fetch notre api avec le paramètre order ainsi que notre "promise" définie plus haut
       .then(response => response.json())
       .then(data => {
-      localStorage.setItem('orderId', data.orderId);
-      document.location.href = 'confirmation.html?id='+ data.orderId;
+      localStorage.setItem('orderId', data.orderId);  // On envoie notre orderID dans le local storage 
+      document.location.href = 'confirmation.html?id='+ data.orderId; // On redirige vers la page de confirmation de commande.
       console.log(data.orderId);
       });
-        
-
 
       } 
     });
@@ -370,15 +362,20 @@ const displayCart = () => {
 
     getProductById(); 
   };
-
-
-
 }
 
 
+/* On utilise une condition pour le fonctionnement de notre page */
+
+if (addedProduct !== null) // si le panier est strictement non null 
+{ displayCart() } // alors on lance notre fonction
 
 
-displayCart()
+else { console.log("Le panier est vide")} // sinon, message dans la console pour indiquer que le panier est vide.
+
+
+
+
 
 
 
